@@ -1,10 +1,12 @@
 import express from 'express';
 import * as userController from '../controllers/user.controller';
-import { newUserValidator } from '../validators/user.validator';
+import * as validator from '../validators/user.validator';
 
 const router = express.Router();
 
-//route to create a new user
-router.post('', newUserValidator, userController.newUser);
+/* route to user registration */
+router.post('', validator.userValidatorRegister, userController.userRegister);
+
+router.post('/login', validator.loginRegister, userController.userLogin);
 
 export default router;
