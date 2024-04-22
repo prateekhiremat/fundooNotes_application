@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 
 /* User Registration */
 export const userRegister = async (body) => {
-  let userObj = await User.findOne({email: body.email}).then()
+  let userObj = await User.findOne({email: body.email})
   if(userObj!==null){
     throw new Error('User Already Exist')
   }
@@ -14,7 +14,7 @@ export const userRegister = async (body) => {
 
 /* User Login */
 export const userLogin = async (body) => {
-  let userObj = await User.findOne({email: body.email}).then()
+  let userObj = await User.findOne({email: body.email})
   if(userObj===null){
     throw new Error('Invalid email')
   }
