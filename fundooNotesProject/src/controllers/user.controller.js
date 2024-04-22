@@ -4,14 +4,9 @@ import * as UserService from '../services/user.service';
 export const userRegister = async (req, res) => {
   try {
     const data = await UserService.userRegister(req.body);
-    const {firstName,lastName,email} = data;
     res.status(HttpStatus.CREATED).json({
       code: HttpStatus.CREATED,
-      data: {
-        firstName,
-        lastName,
-        email
-      },
+      data: data,
       message: 'User created successfully'
     });
   } catch (error) {
