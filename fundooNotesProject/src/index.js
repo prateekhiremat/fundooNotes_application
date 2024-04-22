@@ -9,7 +9,6 @@ import routes from './routes';
 import database from './config/database';
 import {
   appErrorHandler,
-  duplication,
   genericErrorHandler,
   notFound
 } from './middlewares/error.middleware';

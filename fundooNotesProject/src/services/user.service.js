@@ -18,13 +18,10 @@ export const userLogin = async (body) => {
   if(userObj===null){
     throw new Error('Invalid email')
   }
-  return new Promise((resolve, reject)=>{
-    bcrypt.compare(body.password, userObj.password, function(err, result){
-      if(result){
-        resolve(userObj)
-      }else{
-        reject(new Error('Invalid password'))
-      }
-    })
-  })
+  const isMatched = await bcrypt.compare(body.password, userObj.password);
+  if(isMatched){
+    return userObj;
+  }else{
+    throw new Error('Invalid password')
+  }
 };
