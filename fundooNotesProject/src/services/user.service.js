@@ -1,5 +1,5 @@
 import User from '../models/user.model';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 
 /* User Registration */
 export const userRegister = async (body) => {
@@ -33,7 +33,7 @@ export const userLogin = async (body) => {
       return new Promise((resolve, reject)=>{
         bcrypt.compare(body.password, userObj.password, function(err, result){
           if(result)
-            resolve(userObj)
+            resolve(userObj);
           else
             reject(new Error('Invalid password'))
         })

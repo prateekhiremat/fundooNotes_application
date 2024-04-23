@@ -1,5 +1,7 @@
-  import HttpStatus from 'http-status-codes';
+import HttpStatus from 'http-status-codes';
 import * as UserService from '../services/user.service';
+import {v4 as uid} from 'uuid';
+import * as userUtility from '../utils/user.util'
 
 export const userRegister = async (req, res) => {
   try {
@@ -20,6 +22,10 @@ export const userRegister = async (req, res) => {
 export const userLogin = async (req, res) => {
   try {
     const data = await UserService.userLogin(req.body);
+    
+    const token = userUtility.setUser(data)
+    res.cookie('uid', token)
+
     const {firstName, lastName, email} = data;
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
