@@ -1,4 +1,4 @@
-  import HttpStatus from 'http-status-codes';
+import HttpStatus from 'http-status-codes';
 import * as UserService from '../services/user.service';
 
 export const userRegister = async (req, res) => {
