@@ -40,3 +40,24 @@ export const userLogin = async (body) => {
       })
     })
 };
+
+export const updateUser = async(_id, body) => {
+  delete body.email;
+  return User.findOneAndUpdate(
+    {
+      _id
+    },
+    body,
+    {
+      runValidators : false,
+      new : true
+    }
+  ).then((result)=>{
+    return result;
+  })
+};
+
+export const deleteUser = async(_id) => {
+  await User.findByIdAndDelete(_id)
+  return '';
+}
