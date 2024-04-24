@@ -1,22 +1,26 @@
-import { type } from "@hapi/joi/lib/extend";
 import { Schema,model } from "mongoose";
 
 const noteSchema = new Schema(
     {
         title:{
-            type:String
+            type: String
+        },
+        discription:{
+            type: String
         },
         color:{
-            type:String
+            type: String
         },
         isArchived:{
-            type:Boolean
+            type: Boolean,
+            default: false
         },
         isTrashed:{
-            type:Boolean
+            type: Boolean,
+            default: false
         },
         createdBy:{
-            type:String
+            type: String
         }
     },
     {
