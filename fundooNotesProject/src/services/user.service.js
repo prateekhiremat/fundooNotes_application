@@ -1,5 +1,5 @@
 import User from '../models/user.model';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 
 /* User Registration */
 export const userRegister = async (body) => {
@@ -33,10 +33,31 @@ export const userLogin = async (body) => {
       return new Promise((resolve, reject)=>{
         bcrypt.compare(body.password, userObj.password, function(err, result){
           if(result)
-            resolve(userObj)
+            resolve(userObj);
           else
             reject(new Error('Invalid password'))
         })
       })
     })
 };
+
+export const updateUser = async(_id, body) => {
+  delete body.email;
+  return User.findOneAndUpdate(
+    {
+      _id
+    },
+    body,
+    {
+      runValidators : false,
+      new : true
+    }
+  ).then((result)=>{
+    return result;
+  })
+};
+
+export const deleteUser = async(_id) => {
+  await User.findByIdAndDelete(_id)
+  return '';
+}

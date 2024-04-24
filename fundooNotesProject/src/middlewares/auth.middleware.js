@@ -1,5 +1,9 @@
 import HttpStatus from 'http-status-codes';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const secretKey = process.env.SECRET_KEY;
 
 /**
  * Middleware to authenticate if user has a valid Authorization token
@@ -15,12 +19,12 @@ export const userAuth = async (req, res, next) => {
     if (!bearerToken)
       throw {
         code: HttpStatus.BAD_REQUEST,
-        message: 'Authorization token is required'
+        message: 'Please login'
       };
     bearerToken = bearerToken.split(' ')[1];
 
-    const { user } = await jwt.verify(bearerToken, 'your-secret-key');
-    res.locals.user = user;
+    const userPayload = await jwt.verify(bearerToken, secretKey);
+    res.locals.user = userPayload;
     res.locals.token = bearerToken;
     next();
   } catch (error) {
