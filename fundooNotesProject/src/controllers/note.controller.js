@@ -32,7 +32,7 @@ export const getNoteByEmail = async(req, res) => {
       message: `${error}`
     });
   }
-}
+};
 
 export const updateNote = async(req, res) => {
   try{
@@ -63,4 +63,4 @@ export const deleteNote = async(req, res) => {
       message: `${error}`
     });
   }
-}
+};
