@@ -5,7 +5,14 @@ export const createNotes = async(body) => {
 }
 
 export const getNoteByEmail = async(email) => {
-    return Note.find({createdBy: email})
+    return Note.find(
+        {createdBy: email},
+        {
+            title:1,
+            discription:1,
+            color:1
+        }
+    )
 }
 
 export const updateNote = async(_id, body, email) => {
