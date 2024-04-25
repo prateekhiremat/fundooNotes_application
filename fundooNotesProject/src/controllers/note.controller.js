@@ -26,12 +26,28 @@ export const getAllNotes = async(req, res) => {
       data: data
     });
   }catch(error){
-    res.status(HttpStatus.OK).json({
+    res.status(HttpStatus.BAD_REQUEST).json({
       success: false,
       message: `${error}`
     });
   }
 };
+
+export const getNote = async(req, res) =>{
+  try{
+    const data = await NoteService.getNote(req.params._id, req.body.createdBy)
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: 'Note fetched successfully',
+      data: data
+    });
+  }catch(error){
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success: false,
+      message: `${error}`
+    });
+  }
+}
 
 export const updateNote = async(req, res) => {
   try{
@@ -63,3 +79,35 @@ export const deleteNote = async(req, res) => {
     });
   }
 };
+
+export const isArchived = async(req, res) =>{
+  try{
+    const data = await NoteService.isArchived(req.params._id, req.body.createdBy)
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: 'Note updated successfully',
+      data: data
+    });
+  }catch(error){
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success: false,
+      message: `${error}`
+    });
+  }
+}
+
+export const isTrashed = async(req, res) =>{
+  try{
+    const data = await NoteService.isTrashed(req.params._id, req.body.createdBy)
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: 'Note updated successfully',
+      data: data
+    });
+  }catch(error){
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success: false,
+      message: `${error}`
+    });
+  }
+}
