@@ -4,9 +4,9 @@ export const createNotes = async(body) => {
     return await Note.create(body);
 }
 
-export const getNoteByEmail = async(email) => {
+export const getAllNotes = async(_id) => {
     return Note.find(
-        {createdBy: email},
+        {createdBy: _id},
         {
             title:1,
             discription:1,
@@ -15,10 +15,10 @@ export const getNoteByEmail = async(email) => {
     )
 }
 
-export const updateNote = async(_id, body, email) => {
+export const updateNote = async(_id, body, userId) => {
     return await Note.findOneAndUpdate(
         {
-            _id, createdBy: email
+            _id, createdBy: userId
         },
         body,
         {
@@ -31,10 +31,10 @@ export const updateNote = async(_id, body, email) => {
     })
 }
 
-export const deleteNote = async(_id, email) => {
+export const deleteNote = async(_id, userId) => {
     return await Note.findOneAndDelete(
         {
-            _id, createdBy: email
+            _id, createdBy: userId
         }
     ).then((result) => {
         if(result!==null)
