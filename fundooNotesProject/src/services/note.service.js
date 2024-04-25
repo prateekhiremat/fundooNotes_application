@@ -1,4 +1,3 @@
-import { error } from '@hapi/joi/lib/base';
 import Note from '../models/note.model'
 
 export const createNotes = async(body) => {
