@@ -18,9 +18,9 @@ export const updateNote = async(_id, body, email) => {
             new: true
         }
     ).then((updatedNote) => {
-        return updatedNote
-    }).catch((error) => {
-        return error
+        if(updatedNote!==null)
+            return updatedNote
+        throw new Error('Unauthorized Request')
     })
 }
 
@@ -29,9 +29,9 @@ export const deleteNote = async(_id, email) => {
         {
             _id, createdBy: email
         }
-    ).then(() => {
-        return 
-    }).catch((error) => {
-        return error
+    ).then((result) => {
+        if(result!==null)
+            return
+        throw new Error('Unauthorized Request')
     })
 }
