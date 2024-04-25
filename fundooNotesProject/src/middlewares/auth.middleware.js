@@ -22,10 +22,8 @@ export const userAuth = async (req, res, next) => {
         message: 'Please login'
       };
     bearerToken = bearerToken.split(' ')[1];
-
     const userPayload = await jwt.verify(bearerToken, secretKey);
-    res.locals.user = userPayload;
-    res.locals.token = bearerToken;
+    req.body.createdBy = userPayload._id.toString();
     next();
   } catch (error) {
     next(error);

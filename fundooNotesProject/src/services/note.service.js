@@ -1,12 +1,13 @@
+import { result } from '@hapi/joi/lib/base';
 import Note from '../models/note.model'
 
 export const createNotes = async(body) => {
-    return await Note.create(body);
+    return Note.create(body);
 }
 
-export const getNoteByEmail = async(email) => {
+export const getAllNotes = async(_id) => {
     return Note.find(
-        {createdBy: email},
+        {createdBy: _id},
         {
             title:1,
             discription:1,
@@ -15,10 +16,28 @@ export const getNoteByEmail = async(email) => {
     )
 }
 
-export const updateNote = async(_id, body, email) => {
-    return await Note.findOneAndUpdate(
+export const getNote = async(_id, userId) => {
+    return Note.findOne(
         {
-            _id, createdBy: email
+            _id,
+            createdBy: userId
+        },
+        {
+            title: true,
+            discription: true,
+            color: true
+        }
+    ).then((result)=>{
+        if(result!==null)
+            return result
+        throw new Error('Unathorized request')
+    })
+}
+
+export const updateNote = async(_id, body, userId) => {
+    return Note.findOneAndUpdate(
+        {
+            _id, createdBy: userId
         },
         body,
         {
@@ -31,14 +50,58 @@ export const updateNote = async(_id, body, email) => {
     })
 }
 
-export const deleteNote = async(_id, email) => {
-    return await Note.findOneAndDelete(
+export const deleteNote = async(_id, userId) => {
+    return Note.findOneAndDelete(
         {
-            _id, createdBy: email
+            _id, createdBy: userId
         }
     ).then((result) => {
         if(result!==null)
             return
         throw new Error('Unauthorized Request')
+    })
+}
+
+export const isArchived = async(_id, userId) => {
+    return Note.findOne(
+        {
+            _id,
+            createdBy: userId
+        }
+    ).then((note)=>{
+        if(note===null)
+            throw new Error('Unathorized request')
+        note.isArchived = !note.isArchived
+        return Note.findByIdAndUpdate(
+            {
+                _id
+            },
+            note,
+            {
+                new: true
+            }
+        )
+    })
+}
+
+export const isTrashed = async(_id, userId) => {
+    return Note.findOne(
+        {
+            _id,
+            createdBy: userId
+        }
+    ).then((note)=>{
+        if(note===null)
+            throw new Error('Unathorized request')
+        note.isTrashed = !note.isTrashed
+        return Note.findByIdAndUpdate(
+            {
+                _id
+            },
+            note,
+            {
+                new: true
+            }
+        )
     })
 }

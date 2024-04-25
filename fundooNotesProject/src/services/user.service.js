@@ -34,7 +34,10 @@ export const userLogin = async (body) => {
       return new Promise((resolve, reject)=>{
         bcrypt.compare(body.password, userObj.password, function(err, result){
           if(result){
+            console.log(userObj)
+            console.log(userObj._id)
             const token = userUtility.setUser(userObj._id)
+            console.log(token)
             resolve({user: userObj, token});
           }
           else
