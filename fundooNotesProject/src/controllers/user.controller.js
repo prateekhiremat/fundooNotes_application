@@ -28,7 +28,7 @@ export const userLogin = async (req, res) => {
     const {firstName, lastName, email} = data;
     res.status(HttpStatus.OK).json({
       success: true,
-      message: 'User found successfully',
+      message: 'User loggedIn successfully',
       data: {
         firstName,
         lastName,
