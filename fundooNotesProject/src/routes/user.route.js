@@ -10,8 +10,4 @@ router.post('', validator.userValidatorRegister, userController.userRegister);
 
 router.post('/login', validator.loginRegister, userController.userLogin);
 
-router.put('/', userAuth ,userController.userUpdate);
-
-router.delete('',userAuth ,userController.deleteUser);
-
 export default router;

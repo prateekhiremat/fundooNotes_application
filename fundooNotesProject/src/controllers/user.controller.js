@@ -6,13 +6,13 @@ export const userRegister = async (req, res) => {
   try {
     const data = await UserService.userRegister(req.body);
     res.status(HttpStatus.CREATED).json({
-      code: HttpStatus.CREATED,
-      data: data,
-      message: 'User created successfully'
+      success: true,
+      message: 'User created successfully',
+      data: data
     });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
-      code: HttpStatus.BAD_REQUEST,
+      success: false,
       message: `${error}`
     });
   }
@@ -27,55 +27,18 @@ export const userLogin = async (req, res) => {
 
     const {firstName, lastName, email} = data;
     res.status(HttpStatus.OK).json({
-      code: HttpStatus.OK,
+      success: true,
+      message: 'User found successfully',
       data: {
         firstName,
         lastName,
         email
-      },
-      message: 'User found successfully'
+      }
     });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
-      code: HttpStatus.BAD_REQUEST,
+      success: false,
       message: `${error}`
     });
   }
 };
-
-export const userUpdate = async(req, res) => {
-  try{
-    const data = await UserService.updateUser(res.locals.user._id, req.body);
-    const{firstName, lastName, email} = data
-    res.status(HttpStatus.OK).json(
-    {
-      code : HttpStatus.OK,
-      data : {
-        firstName,
-        lastName,
-        email
-      },
-      message : 'User updated successfully'
-    });
-  }catch(error){
-    res.status(HttpStatus.BAD_REQUEST).json({
-      code : HttpStatus.BAD_REQUEST,
-      message : `${error}`
-    });
-  }
-};
-
-export const deleteUser = async(req, res)=>{
-  try{
-    await UserService.deleteUser(res.locals.user._id);
-    res.status(HttpStatus.OK).json({
-      code : HttpStatus.OK,
-      message : 'User deleated successfully'
-    })
-  }catch(error){
-    res.status(HttpStatus.BAD_REQUEST).json({
-      code : HttpStatus.BAD_REQUEST,
-      message : `${error}`
-    })
-  }
-}
