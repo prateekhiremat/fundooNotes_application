@@ -1,5 +1,6 @@
 import User from '../models/user.model';
 import bcrypt from 'bcrypt';
+import * as userUtility from '../utils/user.util'
 
 /* User Registration */
 export const userRegister = async (body) => {
@@ -27,13 +28,15 @@ export const userLogin = async (body) => {
     .then((userObj) => {
       if(userObj===null)
           throw new Error('Invalid email')
-        return userObj
+      return userObj
     })
     .then((userObj)=>{
       return new Promise((resolve, reject)=>{
         bcrypt.compare(body.password, userObj.password, function(err, result){
-          if(result)
-            resolve(userObj);
+          if(result){
+            const token = userUtility.setUser(userObj._id)
+            resolve({user: userObj, token});
+          }
           else
             reject(new Error('Invalid password'))
         })
