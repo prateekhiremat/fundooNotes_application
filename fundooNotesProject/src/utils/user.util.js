@@ -6,8 +6,7 @@ const secretKey = process.env.SECRET_KEY;
 
 export function setUser(user){
     const payload = {
-        _id: user.id,
-        email: user.email
+        _id: user
     }
     return jwt.sign(payload,secretKey);
 }
