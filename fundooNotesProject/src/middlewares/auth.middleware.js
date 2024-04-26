@@ -23,7 +23,7 @@ export const userAuth = async (req, res, next) => {
       };
     bearerToken = bearerToken.split(' ')[1];
     const userPayload = await jwt.verify(bearerToken, secretKey);
-    req.body.createdBy = userPayload._id.toString();
+    req.body.createdBy = userPayload._id;
     next();
   } catch (error) {
     next(error);
