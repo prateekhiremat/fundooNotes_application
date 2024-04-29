@@ -4,10 +4,9 @@ dotenv.config();
 import jwt from 'jsonwebtoken'
 const secretKey = process.env.SECRET_KEY;
 
-export function setUser(user){
+export function setUser(userId){
     const payload = {
-        _id: user.id,
-        email: user.email
+        _id: userId
     }
     return jwt.sign(payload,secretKey);
 }

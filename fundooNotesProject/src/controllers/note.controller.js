@@ -3,7 +3,6 @@ import * as NoteService from '../services/note.service'
 
 export const createNotes = async(req, res) => {
     try {
-        req.body.createdBy = res.locals.user.email
         const data = await NoteService.createNotes(req.body);
         res.status(HttpStatus.CREATED).json({
           success: true,
@@ -18,25 +17,41 @@ export const createNotes = async(req, res) => {
       }
 };
 
-export const getNoteByEmail = async(req, res) => {
+export const getAllNotes = async(req, res) => {
   try{
-    const data = await NoteService.getNoteByEmail(res.locals.user.email)
+    const data = await NoteService.getAllNotes(req.body.createdBy)
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'fetched successfully',
       data: data
     });
   }catch(error){
-    res.status(HttpStatus.OK).json({
+    res.status(HttpStatus.BAD_REQUEST).json({
       success: false,
       message: `${error}`
     });
   }
 };
 
+export const getNote = async(req, res) =>{
+  try{
+    const data = await NoteService.getNote(req.params._id, req.body.createdBy)
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: 'Note fetched successfully',
+      data: data
+    });
+  }catch(error){
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success: false,
+      message: `${error}`
+    });
+  }
+}
+
 export const updateNote = async(req, res) => {
   try{
-    const data = await NoteService.updateNote(req.params._id, req.body, res.locals.user.email);
+    const data = await NoteService.updateNote(req.params._id, req.body, req.body._id);
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Note Updated Successfully',
@@ -52,7 +67,7 @@ export const updateNote = async(req, res) => {
 
 export const deleteNote = async(req, res) => {
   try{
-    await NoteService.deleteNote(req.params._id, res.locals.user.email);
+    await NoteService.deleteNote(req.params._id, req.body._id);
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Note Deleated Successfully',
@@ -64,3 +79,35 @@ export const deleteNote = async(req, res) => {
     });
   }
 };
+
+export const isArchived = async(req, res) =>{
+  try{
+    const data = await NoteService.isArchived(req.params._id, req.body.createdBy)
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: 'Note updated successfully',
+      data: data
+    });
+  }catch(error){
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success: false,
+      message: `${error}`
+    });
+  }
+}
+
+export const isTrashed = async(req, res) =>{
+  try{
+    const data = await NoteService.isTrashed(req.params._id, req.body.createdBy)
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: 'Note updated successfully',
+      data: data
+    });
+  }catch(error){
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success: false,
+      message: `${error}`
+    });
+  }
+}
