@@ -33,3 +33,35 @@ export const userLogin = async (req, res) => {
     });
   }
 };
+
+export const forgetPassword = async(req, res) => {
+  try{
+    const data = await UserService.forgetPassword(req.params.email)
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: 'Please reset your password through email',
+      token: data
+    });
+  }catch(error){
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success: false,
+      message: `${error}`
+    });
+  }
+}
+
+export const resetPassword = async(req, res) => {
+  try{
+    const data = await UserService.resetPassword(req.userId, req.params.newPassword)
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: 'Password reset successfull',
+      data: data
+    });
+  }catch(error){
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success: false,
+      message: `${error}`
+    });
+  }
+}
