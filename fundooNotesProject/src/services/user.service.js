@@ -1,6 +1,7 @@
 import User from '../models/user.model';
 import bcrypt from 'bcrypt';
 import * as userUtility from '../utils/user.util'
+import sendMail from '../utils/emailService.util'
 
 /* User Registration */
 export const userRegister = async (body) => {
@@ -36,7 +37,7 @@ export const userLogin = async (body) => {
           if(result){
             console.log(userObj)
             console.log(userObj._id)
-            const token = userUtility.setUser(userObj._id)
+            const token = userUtility.generateToken(userObj._id)
             console.log(token)
             resolve({user: userObj, token});
           }
@@ -47,23 +48,37 @@ export const userLogin = async (body) => {
     })
 };
 
-export const updateUser = async(_id, body) => {
-  delete body.email;
-  return User.findOneAndUpdate(
-    {
-      _id
-    },
-    body,
-    {
-      runValidators : false,
-      new : true
-    }
-  ).then((result)=>{
-    return result;
-  })
+export const forgetPassword = async(email) => {
+  return User.findOne({email})
+    .then((userObj)=>{
+      const token = userUtility.generateToken(userObj._id)
+      const subject = 'Reset Password'
+      const message = `http://localhost:3000/api/users/reset-password/`
+      sendMail(userObj.email, subject, message)
+      return token;
+    })
+    .catch(()=>{
+      throw new Error('Unathorized Request')
+    })
 };
 
-export const deleteUser = async(_id) => {
-  await User.findByIdAndDelete(_id)
-  return '';
+export const resetPassword = async(userId, newPassword) => {
+  const newHashedPassword = await bcrypt.hash(newPassword, 10);
+  return User.findOne({_id: userId})
+    .then((userObj)=>{
+      userObj.password = newHashedPassword
+      userObj.__v = userObj.__v+1;
+      return User.findOneAndUpdate(
+        {
+          _id: userObj._id
+        },
+        userObj,
+        {
+          new: true
+        }
+      )
+    })
+    .catch(() => {
+      throw new Error('Unathorized request')
+    })
 }
