@@ -2,6 +2,7 @@ import User from '../models/user.model';
 import bcrypt from 'bcrypt';
 import * as userUtility from '../utils/user.util'
 import sendMail from '../utils/emailService.util'
+import logger from '../config/logger';
 
 /* User Registration */
 export const userRegister = async (body) => {
@@ -35,10 +36,7 @@ export const userLogin = async (body) => {
       return new Promise((resolve, reject)=>{
         bcrypt.compare(body.password, userObj.password, function(err, result){
           if(result){
-            console.log(userObj)
-            console.log(userObj._id)
             const token = userUtility.generateToken(userObj._id)
-            console.log(token)
             resolve({user: userObj, token});
           }
           else
@@ -49,36 +47,30 @@ export const userLogin = async (body) => {
 };
 
 export const forgetPassword = async(email) => {
-  return User.findOne({email})
-    .then((userObj)=>{
-      const token = userUtility.generateToken(userObj._id)
-      const subject = 'Reset Password'
-      const message = `http://localhost:3000/api/users/reset-password/`
-      sendMail(userObj.email, subject, message)
-      return token;
-    })
-    .catch(()=>{
-      throw new Error('Unathorized Request')
-    })
+  const user = await User.findOne({email})
+  if(user!==null){
+    const token = userUtility.generateTokenForPassword(user._id)
+    const subject = 'Reset Password'
+    const message = `<h1>http://localhost:3000/api/users/reset-password</h1>\n${token}`
+    sendMail(user.email, subject, message)
+    return
+  }else{
+    throw new Error('Unathorized Request')
+  }
 };
 
 export const resetPassword = async(userId, newPassword) => {
-  const newHashedPassword = await bcrypt.hash(newPassword, 10);
-  return User.findOne({_id: userId})
-    .then((userObj)=>{
-      userObj.password = newHashedPassword
-      userObj.__v = userObj.__v+1;
-      return User.findOneAndUpdate(
-        {
-          _id: userObj._id
-        },
-        userObj,
-        {
-          new: true
-        }
-      )
-    })
-    .catch(() => {
-      throw new Error('Unathorized request')
-    })
+  const user = await User.findOne({_id: userId})
+  if(user === null)
+    throw new Error('Unathorized Request')
+  user.password = await bcrypt.hash(newPassword, 10);
+  return User.findOneAndUpdate(
+    {
+      _id: user._id
+    },
+    user,
+    {
+      new: true
+    }
+  )
 }

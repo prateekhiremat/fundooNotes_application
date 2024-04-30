@@ -32,13 +32,11 @@ export default function sendMail(recipient, subject, message){
         from: mail,
         to: recipient,
         subject,
-        text: message
+        html: message
     }
 
     transport.sendMail(mail_format, (err, result) => {
         if(err)
             throw new Error(err)
-        else
-            logger.info(result)
     })
 }
