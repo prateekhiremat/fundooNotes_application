@@ -36,7 +36,7 @@ export const userLogin = async (req, res) => {
 
 export const forgetPassword = async(req, res) => {
   try{
-    const data = await UserService.forgetPassword(req.params.email)
+    const data = await UserService.forgetPassword(req.body.email)
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Please reset your password through email',
@@ -52,7 +52,7 @@ export const forgetPassword = async(req, res) => {
 
 export const resetPassword = async(req, res) => {
   try{
-    const data = await UserService.resetPassword(req.userId, req.params.newPassword)
+    const data = await UserService.resetPassword(req.userId, req.body.password)
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Password reset successfull',
