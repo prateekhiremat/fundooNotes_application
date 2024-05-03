@@ -36,6 +36,7 @@ export const getAllNotes = async(req, res) => {
 export const getNote = async(req, res) =>{
   try{
     const data = await NoteService.getNote(req.params._id, req.body.createdBy)
+    console.log(req.params._id, req.body.createdBy)
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Note fetched successfully',
@@ -51,7 +52,7 @@ export const getNote = async(req, res) =>{
 
 export const updateNote = async(req, res) => {
   try{
-    const data = await NoteService.updateNote(req.params._id, req.body, req.body._id);
+    const data = await NoteService.updateNote(req.params._id, req.body, req.body.createdBy);
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Note Updated Successfully',
@@ -67,7 +68,7 @@ export const updateNote = async(req, res) => {
 
 export const deleteNote = async(req, res) => {
   try{
-    await NoteService.deleteNote(req.params._id, req.body._id);
+    await NoteService.deleteNote(req.params._id, req.body.createdBy);
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Note Deleated Successfully',

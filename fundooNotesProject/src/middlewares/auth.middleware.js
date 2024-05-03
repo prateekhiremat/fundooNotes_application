@@ -1,6 +1,7 @@
 import HttpStatus from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { loggers } from 'winston';
 dotenv.config();
 
 const secretKey = process.env.SECRET_KEY
@@ -22,10 +23,9 @@ export const userAuth = async (req, res, next) => {
         code: HttpStatus.BAD_REQUEST,
         message: 'Please login'
       };
-    bearerToken = bearerToken.split(' ')[1];
+    bearerToken = bearerToken.split(' ')[1]
     const userPayload = jwt.verify(bearerToken, secretKey);
     req.body.createdBy = userPayload._id;
-    req.userId = userPayload._id;
     next();
   } catch (error) {
     next(error);
@@ -38,7 +38,7 @@ export const userAuthForResetPassword = async (req, res, next) => {
     if (!bearerToken)
       throw {
         code: HttpStatus.BAD_REQUEST,
-        message: 'Please login'
+        message: 'Bad Request'
       };
     bearerToken = bearerToken.split(' ')[1];
     const userPayload = jwt.verify(bearerToken, secretKeyReset);
