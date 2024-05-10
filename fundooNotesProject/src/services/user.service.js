@@ -2,7 +2,10 @@ import User from '../models/user.model';
 import bcrypt from 'bcrypt';
 import * as userUtility from '../utils/user.util'
 import sendMail from '../utils/emailService.util'
-import logger from '../config/logger';
+// import { Redis } from 'ioredis'
+// import { getAllNotes } from './note.service';
+
+// const client = new Redis();
 
 /* User Registration */
 export const userRegister = async (body) => {
@@ -42,6 +45,8 @@ export const userLogin = async (body) => {
           else
             reject(new Error('Invalid password'))
         })
+        // const userAllNotes = getAllNotes();
+        // client.set(userObj._id, userAllNotes)
       })
     })
 };
@@ -53,7 +58,7 @@ export const forgetPassword = async(email) => {
     const subject = 'Reset Password'
     const message = `<h1>http://localhost:3000/api/users/reset-password</h1>\n${token}`
     sendMail(user.email, subject, message)
-    return
+    return token
   }else{
     throw new Error('Unathorized Request')
   }

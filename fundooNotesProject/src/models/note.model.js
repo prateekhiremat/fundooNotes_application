@@ -20,7 +20,8 @@ const noteSchema = new Schema(
             default: false
         },
         createdBy:{
-            type: String
+            type: Schema.Types.ObjectId,
+            ref: 'User', // Name of the referenced model
         }
     },
     {
