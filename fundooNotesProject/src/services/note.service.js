@@ -9,9 +9,9 @@ export const getAllNotes = async(_id) => {
     return Note.find(
         {createdBy: _id},
         {
-            title:1,
-            discription:1,
-            color:1
+            title: true,
+            discription: true,
+            color: true
         }
     )
 }

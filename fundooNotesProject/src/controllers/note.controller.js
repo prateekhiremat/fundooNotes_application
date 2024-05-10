@@ -4,10 +4,14 @@ import * as NoteService from '../services/note.service'
 export const createNotes = async(req, res) => {
     try {
         const data = await NoteService.createNotes(req.body);
+        const{title, description, color, _id } = data
         res.status(HttpStatus.CREATED).json({
           success: true,
           message: 'Note created successfully',
-          data: data
+          _id,
+          title,
+          description,
+          color
         });
       } catch (error) {
         res.status(HttpStatus.BAD_REQUEST).json({
@@ -36,11 +40,13 @@ export const getAllNotes = async(req, res) => {
 export const getNote = async(req, res) =>{
   try{
     const data = await NoteService.getNote(req.params._id, req.body.createdBy)
-    console.log(req.params._id, req.body.createdBy)
+    const{title, description, color } = data
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Note fetched successfully',
-      data: data
+      title,
+      description,
+      color
     });
   }catch(error){
     res.status(HttpStatus.BAD_REQUEST).json({
@@ -53,10 +59,13 @@ export const getNote = async(req, res) =>{
 export const updateNote = async(req, res) => {
   try{
     const data = await NoteService.updateNote(req.params._id, req.body, req.body.createdBy);
+    const{title, description, color } = data
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Note Updated Successfully',
-      data: data
+      title,
+      description,
+      color
     });
   }catch(error){
     res.status(HttpStatus.BAD_REQUEST).json({
@@ -84,10 +93,14 @@ export const deleteNote = async(req, res) => {
 export const isArchived = async(req, res) =>{
   try{
     const data = await NoteService.isArchived(req.params._id, req.body.createdBy)
+    const{title, description, color, isArchived } = data
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Note updated successfully',
-      data: data
+      title,
+      description,
+      color,
+      isArchived
     });
   }catch(error){
     res.status(HttpStatus.BAD_REQUEST).json({
@@ -100,10 +113,13 @@ export const isArchived = async(req, res) =>{
 export const isTrashed = async(req, res) =>{
   try{
     const data = await NoteService.isTrashed(req.params._id, req.body.createdBy)
+    const{title, description, color, isTrashed} = data
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Note updated successfully',
-      data: data
+      title,
+      description,
+      color
     });
   }catch(error){
     res.status(HttpStatus.BAD_REQUEST).json({

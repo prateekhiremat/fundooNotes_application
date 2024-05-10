@@ -1,8 +1,6 @@
 import express from 'express';
 const router = express.Router();
 
-import logger from '../config/logger';
-
 import userRoute from './user.route';
 import noteRoute from './note.route'
 /**

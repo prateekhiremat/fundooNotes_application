@@ -391,7 +391,7 @@
         "title": {
           "type": "string"
         },
-        "discription": {
+        "description": {
           "type": "string"
         },
         "color": {

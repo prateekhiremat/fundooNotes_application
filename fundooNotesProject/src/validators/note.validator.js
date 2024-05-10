@@ -1,4 +1,5 @@
 import Joi  from "@hapi/joi";
+import HttpStatus from 'http-status-codes';
 
 export const noteValidator = (req, res, next) => {
     const schema = Joi.object({
@@ -9,7 +10,10 @@ export const noteValidator = (req, res, next) => {
     });
     const{error, value} = schema.validate(req.body)
     if(error)
-        next(error)
+        res.status(HttpStatus.BAD_REQUEST).json({
+            success: false,
+            message: `${error}`
+          });
     else
         next()
 }

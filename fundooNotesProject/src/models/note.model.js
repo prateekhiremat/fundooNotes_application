@@ -5,11 +5,12 @@ const noteSchema = new Schema(
         title:{
             type: String
         },
-        discription:{
+        description:{
             type: String
         },
         color:{
-            type: String
+            type: String,
+            default: 'white'
         },
         isArchived:{
             type: Boolean,
