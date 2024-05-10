@@ -4,10 +4,13 @@ import * as UserService from '../services/user.service';
 export const userRegister = async (req, res) => {
   try {
     const data = await UserService.userRegister(req.body);
+    const{firstName, lastName, email} = data
     res.status(HttpStatus.CREATED).json({
       success: true,
       message: 'User created successfully',
-      data: data
+      firstName,
+      lastName,
+      email
     });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
@@ -20,10 +23,13 @@ export const userRegister = async (req, res) => {
 export const userLogin = async (req, res) => {
   try {
     const data = await UserService.userLogin(req.body);
+    const{firstName, lastName, email} = data
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'User loggedIn successfully',
-      data: data.user,
+      firstName,
+      lastName,
+      email,
       token: data.token
     });
   } catch (error) {
@@ -53,10 +59,11 @@ export const forgetPassword = async(req, res) => {
 export const resetPassword = async(req, res) => {
   try{
     const data = await UserService.resetPassword(req.userId, req.body.password)
+    const email = data
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Password reset successfull',
-      data: data
+      email: email
     });
   }catch(error){
     res.status(HttpStatus.BAD_REQUEST).json({

@@ -1,7 +1,6 @@
 import HttpStatus from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { loggers } from 'winston';
 dotenv.config();
 
 const secretKey = process.env.SECRET_KEY
@@ -28,7 +27,10 @@ export const userAuth = async (req, res, next) => {
     req.body.createdBy = userPayload._id;
     next();
   } catch (error) {
-    next(error);
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success: false,
+      message: `${error}`
+    });
   }
 };
 

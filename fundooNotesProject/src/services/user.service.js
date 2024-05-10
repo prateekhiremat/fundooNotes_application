@@ -2,18 +2,14 @@ import User from '../models/user.model';
 import bcrypt from 'bcrypt';
 import * as userUtility from '../utils/user.util'
 import sendMail from '../utils/emailService.util'
-// import { Redis } from 'ioredis'
-// import { getAllNotes } from './note.service';
 
-// const client = new Redis();
-
-/* User Registration */
 export const userRegister = async (body) => {
+  body.email = body.email.toLowerCase()
   return User.findOne({email: body.email})
     .then((userObj) => {
       if(userObj!==null) 
         throw new Error('User Already Exist')
-        return bcrypt.hash(body.password,10)
+        return bcrypt.hash(body.password, 10)
     })
     .then((hashedPassword)=>{
       body.password = hashedPassword
@@ -27,7 +23,6 @@ export const userRegister = async (body) => {
     })
 };
 
-/* User Login */
 export const userLogin = async (body) => {
   return User.findOne({email: body.email})
     .then((userObj) => {
@@ -45,8 +40,6 @@ export const userLogin = async (body) => {
           else
             reject(new Error('Invalid password'))
         })
-        // const userAllNotes = getAllNotes();
-        // client.set(userObj._id, userAllNotes)
       })
     })
 };
