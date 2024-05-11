@@ -54,6 +54,17 @@ describe('API testing', () => {
           expect(res.status).toBe(201)
       });
 
+      it('Should not register user', async () => {
+        const res = await request(app)
+          .post('/api/users').send({
+            firstName: "Prateek",
+            lastName: "Hiremath",
+            email: "prateek.s.hiremath123@gmail.com",
+            password: "Prateek@123"
+          })
+          expect(res.status).toBe(400)
+      });
+
     });
 
     describe('Login User', () => {
@@ -77,43 +88,43 @@ describe('API testing', () => {
       });
     });
 
-    // describe('Forgot Password', () => {
-    //   it('Should send mail along with token', async () => {
-    //     const res = await request(app)
-    //       .post('/api/users/forgotpassword').send({
-    //         email: "prateek.s.hiremath123@gmail.com"
-    //       })
-    //       .expect(200)
-    //     resetToken = res.body.token
-    //   });
+    describe('Forgot Password', () => {
+      it('Should send mail along with token', async () => {
+        const res = await request(app)
+          .post('/api/users/forgotpassword').send({
+            email: "prateek.s.hiremath123@gmail.com"
+          })
+          .expect(200)
+        resetToken = res.body.token
+      });
 
-    //   it('Should not send mail along with token', async () => {
-    //     const res = await request(app)
-    //       .post('/api/users/forgotpassword').send({
-    //         email: "appu@gmail.com"
-    //       })
-    //       .expect(400)
-    //   });
+      it('Should not send mail along with token', async () => {
+        const res = await request(app)
+          .post('/api/users/forgotpassword').send({
+            email: "appu@gmail.com"
+          })
+          .expect(400)
+      });
 
-    // });
+    });
 
-    // describe('Reset Password', () => {
-    //   it('Should reset the password', async () => {
-    //     const res = await request(app)
-    //       .post('/api/users/resetPassword')
-    //       .set('Authorization', `Bearer ${resetToken}`)
-    //       .send({ password: "Hiremath@987" });
-    //     expect(res.statusCode).toBe(200);
-    //   });
+    describe('Reset Password', () => {
+      it('Should reset the password', async () => {
+        const res = await request(app)
+          .post('/api/users/resetPassword')
+          .set('Authorization', `Bearer ${resetToken}`)
+          .send({ password: "Hiremath@987" });
+        expect(res.statusCode).toBe(200);
+      });
 
-    //   it('Should not reset the password', async () => {
-    //     const res = await request(app)
-    //       .post('/api/users/resetPassword')
-    //       .set('Authorization', `Bearer ${resetToken}`)
-    //       .send({ password: "" });
-    //     expect(res.statusCode).toBe(400);
-    //   });
-    // });
+      it('Should not reset the password', async () => {
+        const res = await request(app)
+          .post('/api/users/resetPassword')
+          .set('Authorization', `Bearer ${resetToken}`)
+          .send({ password: "" });
+        expect(res.statusCode).toBe(400);
+      });
+    });
 
     describe('Create Note', () => {
       it('Should create a new note', async () => {

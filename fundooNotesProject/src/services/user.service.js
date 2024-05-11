@@ -7,9 +7,12 @@ export const userRegister = async (body) => {
   body.email = body.email.toLowerCase()
   return User.findOne({email: body.email})
     .then((userObj) => {
-      if(userObj!==null) 
+      console.log(userObj)
+      console.log('1')
+      if(userObj!==null){
         throw new Error('User Already Exist')
-        return bcrypt.hash(body.password, 10)
+      }
+      return bcrypt.hash(body.password, 10)
     })
     .then((hashedPassword)=>{
       body.password = hashedPassword
@@ -17,9 +20,6 @@ export const userRegister = async (body) => {
     })
     .then((data)=>{
       return data
-    })
-    .catch((error) => {
-      return error
     })
 };
 
