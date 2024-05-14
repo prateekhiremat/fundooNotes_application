@@ -48,12 +48,6 @@ export const deleteNote = async(_id, userId) => {
         }
     )
     await deleteNoteFromRedisClint(userId, _id)
-
-        const redisNote = await getNoteFromRedisClint(userId, note._id)
-        console.log(redisNote)
-        console.log('#################################################')
-        const userNotes = await getAllNotesFromRedisClint(userId);
-        console.log(userNotes)
 }
 
 export const isArchived = async(_id, userId) => {
