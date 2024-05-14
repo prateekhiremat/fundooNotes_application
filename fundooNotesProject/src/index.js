@@ -16,7 +16,7 @@ import logger, { logStream } from './config/logger';
 
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express'
-import swaggerDoc from './swagger/swagger.json'
+import swaggerDoc from './swagger/swagger_3.0.1.json'
 
 const app = express();
 const host = process.env.APP_HOST;

@@ -3,7 +3,7 @@ import * as NoteService from '../services/note.service'
 
 export const createNotes = async(req, res) => {
     try {
-        const data = await NoteService.createNotes(req.body);
+        const data = await NoteService.createNotes(req.body.createdBy, req.body);
         const{title, description, color, _id } = data
         res.status(HttpStatus.CREATED).json({
           success: true,
@@ -24,10 +24,16 @@ export const createNotes = async(req, res) => {
 export const getAllNotes = async(req, res) => {
   try{
     const data = await NoteService.getAllNotes(req.body.createdBy)
+    const resData = data.map(({ title, description, color }) => ({
+      title,
+      description,
+      color
+    }));
+    
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'fetched successfully',
-      data: data
+      data: resData
     });
   }catch(error){
     res.status(HttpStatus.BAD_REQUEST).json({
@@ -40,7 +46,7 @@ export const getAllNotes = async(req, res) => {
 export const getNote = async(req, res) =>{
   try{
     const data = await NoteService.getNote(req.params._id, req.body.createdBy)
-    const{title, description, color } = data
+    const{title, description, color } = data[0]
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Note fetched successfully',
@@ -119,7 +125,8 @@ export const isTrashed = async(req, res) =>{
       message: 'Note updated successfully',
       title,
       description,
-      color
+      color,
+      isTrashed
     });
   }catch(error){
     res.status(HttpStatus.BAD_REQUEST).json({

@@ -1,41 +1,30 @@
-import { result } from '@hapi/joi/lib/base';
 import Note from '../models/note.model'
+import { deleteNoteFromRedisClint, getAllNotesFromRedisClint, getNoteFromRedisClint, setToRedisClint } from '../utils/redisClint';
 
-export const createNotes = async(body) => {
-    return Note.create(body);
+export const createNotes = async(userId, body) => {
+    const note = await Note.create(body);
+    await setToRedisClint(userId, note)
+    return note;
 }
 
 export const getAllNotes = async(_id) => {
-    return Note.find(
-        {createdBy: _id},
-        {
-            title: true,
-            discription: true,
-            color: true
-        }
-    )
+    return await getAllNotesFromRedisClint(_id)
 }
 
 export const getNote = async(_id, userId) => {
-    return Note.findOne(
-        {
-            _id,
-            createdBy: userId
-        },
-        {
-            title: true,
-            discription: true,
-            color: true
-        }
-    ).then((result)=>{
-        if(result!==null)
-            return result
-        throw new Error('Unathorized request')
-    })
+    const note = await getNoteFromRedisClint(userId, _id);
+    console.log(note)
+    if(note!==null)
+        return note
+    throw new Error('Note not found')
+    
 }
 
 export const updateNote = async(_id, body, userId) => {
-    return Note.findOneAndUpdate(
+    let note = await getNoteFromRedisClint(userId, _id);
+    if(note===null)
+        throw new Error('Note not found')
+    note = await Note.findOneAndUpdate(
         {
             _id, createdBy: userId
         },
@@ -43,65 +32,70 @@ export const updateNote = async(_id, body, userId) => {
         {
             new: true
         }
-    ).then((updatedNote) => {
-        if(updatedNote!==null)
-            return updatedNote
-        throw new Error('Unauthorized Request')
-    })
+    )
+    await deleteNoteFromRedisClint(userId, _id)
+    await setToRedisClint(userId, note)
+    return note
 }
 
 export const deleteNote = async(_id, userId) => {
-    return Note.findOneAndDelete(
+    const note = await getNoteFromRedisClint(userId, _id);
+    if(note===null)
+        throw new Error('Note not found')
+    await Note.findOneAndDelete(
         {
             _id, createdBy: userId
         }
-    ).then((result) => {
-        if(result!==null)
-            return
-        throw new Error('Unauthorized Request')
-    })
+    )
+    await deleteNoteFromRedisClint(userId, _id)
+
+        const redisNote = await getNoteFromRedisClint(userId, note._id)
+        console.log(redisNote)
+        console.log('#################################################')
+        const userNotes = await getAllNotesFromRedisClint(userId);
+        console.log(userNotes)
 }
 
 export const isArchived = async(_id, userId) => {
-    return Note.findOne(
+    let note = await getNoteFromRedisClint(userId, _id);
+    if(note===null)
+        throw new Error('Note not found')
+    note[0].isArchived = !note[0].isArchived
+    note = await Note.findByIdAndUpdate(
         {
-            _id,
-            createdBy: userId
+            _id
+        },
+        note[0],
+        {
+            new: true
         }
-    ).then((note)=>{
-        if(note===null)
-            throw new Error('Unathorized request')
-        note.isArchived = !note.isArchived
-        return Note.findByIdAndUpdate(
-            {
-                _id
-            },
-            note,
-            {
-                new: true
-            }
-        )
-    })
+    )
+    await deleteNoteFromRedisClint(userId, _id)
+    await setToRedisClint(userId, note)
+    return note;
 }
 
 export const isTrashed = async(_id, userId) => {
-    return Note.findOne(
+    let note = await getNoteFromRedisClint(userId, _id);
+    if(note===null)
+        throw new Error('Note not found')
+    note[0].isTrashed = !note[0].isTrashed
+    note = await Note.findByIdAndUpdate(
         {
-            _id,
-            createdBy: userId
+            _id
+        },
+        note[0],
+        {
+            new: true
         }
-    ).then((note)=>{
-        if(note===null)
-            throw new Error('Unathorized request')
-        note.isTrashed = !note.isTrashed
-        return Note.findByIdAndUpdate(
-            {
-                _id
-            },
-            note,
-            {
-                new: true
-            }
-        )
-    })
+    )
+    await deleteNoteFromRedisClint(userId, _id)
+    await setToRedisClint(userId, note)
+    return note;
+}
+
+export const getAllNotesForRedis = async(_id) => {
+    return Note.find(
+        {createdBy: _id}
+    )
 }
