@@ -3,14 +3,10 @@ import * as UserService from '../services/user.service';
 
 export const userRegister = async (req, res) => {
   try {
-    const data = await UserService.userRegister(req.body);
-    const{firstName, lastName, email} = data
+    await UserService.userRegister(req.body);
     res.status(HttpStatus.CREATED).json({
       success: true,
       message: 'User created successfully',
-      firstName,
-      lastName,
-      email
     });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
@@ -23,12 +19,11 @@ export const userRegister = async (req, res) => {
 export const userLogin = async (req, res) => {
   try {
     const data = await UserService.userLogin(req.body);
-    const{firstName, lastName, email} = data
+    const{firstName, email} = data.user
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'User loggedIn successfully',
       firstName,
-      lastName,
       email,
       token: data.token
     });
@@ -62,8 +57,7 @@ export const resetPassword = async(req, res) => {
     const email = data
     res.status(HttpStatus.OK).json({
       success: true,
-      message: 'Password reset successfull',
-      email: email
+      message: 'Password reset successfull'
     });
   }catch(error){
     res.status(HttpStatus.BAD_REQUEST).json({

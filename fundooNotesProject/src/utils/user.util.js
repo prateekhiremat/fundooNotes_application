@@ -9,12 +9,12 @@ export function generateToken(userId){
     const payload = {
         _id: userId
     }
-    return jwt.sign(payload,secretKey);
+    return jwt.sign(payload, secretKey, { expiresIn: '1d' });
 }
 
 export function generateTokenForPassword(userId){
     const payload = {
         _id: userId
     }
-    return jwt.sign(payload,secretKeyReset);
+    return jwt.sign(payload, secretKeyReset, { expiresIn: '5m' });
 }

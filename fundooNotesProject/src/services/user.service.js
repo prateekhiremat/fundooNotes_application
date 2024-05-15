@@ -7,7 +7,7 @@ import { clearRedisClint, setToRedisClint } from '../utils/redisClint';
 
 export const userRegister = async (body) => {
   body.email = body.email.toLowerCase()
-  return User.findOne({email: body.email})
+  await User.findOne({email: body.email})
     .then((userObj) => {
       if(userObj!==null){
         throw new Error('User Already Exist')
@@ -16,14 +16,12 @@ export const userRegister = async (body) => {
     })
     .then((hashedPassword)=>{
       body.password = hashedPassword
-      return User.create(body)
-    })
-    .then((data)=>{
-      return data
+      User.create(body)
     })
 };
 
 export const userLogin = async (body) => {
+  body.email = body.email.toLowerCase()
   return User.findOne({email: body.email})
     .then((userObj) => {
       if(userObj===null)
@@ -35,11 +33,9 @@ export const userLogin = async (body) => {
         bcrypt.compare(body.password, userObj.password, async function(err, result){
           if(result){
             const token = userUtility.generateToken(userObj._id)
-            
             const redisData = await getAllNotesForRedis(userObj._id)
             clearRedisClint(userObj._id)
             setToRedisClint(userObj._id, redisData)
-            
             resolve({user: userObj, token});
           }
           else
