@@ -4,7 +4,7 @@ import { deleteNoteFromRedisClint, getAllNotesFromRedisClint, getNoteFromRedisCl
 export const createNotes = async(userId, body) => {
     const note = await Note.create(body);
     await setToRedisClint(userId, note)
-    return note;
+    return note._id;
 }
 
 export const getAllNotes = async(_id) => {
@@ -13,11 +13,9 @@ export const getAllNotes = async(_id) => {
 
 export const getNote = async(_id, userId) => {
     const note = await getNoteFromRedisClint(userId, _id);
-    console.log(note)
     if(note!==null)
         return note
     throw new Error('Note not found')
-    
 }
 
 export const updateNote = async(_id, body, userId) => {
@@ -35,7 +33,6 @@ export const updateNote = async(_id, body, userId) => {
     )
     await deleteNoteFromRedisClint(userId, _id)
     await setToRedisClint(userId, note)
-    return note
 }
 
 export const deleteNote = async(_id, userId) => {
@@ -48,50 +45,42 @@ export const deleteNote = async(_id, userId) => {
         }
     )
     await deleteNoteFromRedisClint(userId, _id)
-
-        const redisNote = await getNoteFromRedisClint(userId, note._id)
-        console.log(redisNote)
-        console.log('#################################################')
-        const userNotes = await getAllNotesFromRedisClint(userId);
-        console.log(userNotes)
 }
 
 export const isArchived = async(_id, userId) => {
     let note = await getNoteFromRedisClint(userId, _id);
     if(note===null)
         throw new Error('Note not found')
-    note[0].isArchived = !note[0].isArchived
+    note.isArchived = !note.isArchived
     note = await Note.findByIdAndUpdate(
         {
             _id
         },
-        note[0],
+        note,
         {
             new: true
         }
     )
     await deleteNoteFromRedisClint(userId, _id)
     await setToRedisClint(userId, note)
-    return note;
 }
 
 export const isTrashed = async(_id, userId) => {
     let note = await getNoteFromRedisClint(userId, _id);
     if(note===null)
         throw new Error('Note not found')
-    note[0].isTrashed = !note[0].isTrashed
+    note.isTrashed = !note.isTrashed
     note = await Note.findByIdAndUpdate(
         {
             _id
         },
-        note[0],
+        note,
         {
             new: true
         }
     )
     await deleteNoteFromRedisClint(userId, _id)
     await setToRedisClint(userId, note)
-    return note;
 }
 
 export const getAllNotesForRedis = async(_id) => {

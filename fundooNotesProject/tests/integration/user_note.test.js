@@ -41,6 +41,7 @@ describe('API testing', () => {
             password: "Harsh@123"
           })
           expect(res.status).toBe(400)
+          expect(res.body.success).toBe(false)
       });
 
       it('Should register user', async () => {
@@ -52,6 +53,7 @@ describe('API testing', () => {
             password: "Prateek@123"
           })
           expect(res.status).toBe(201)
+          expect(res.body.success).toBe(true)
       });
 
       it('Should not register user', async () => {
@@ -63,6 +65,7 @@ describe('API testing', () => {
             password: "Prateek@123"
           })
           expect(res.status).toBe(400)
+          expect(res.body.success).toBe(false)
       });
 
     });
@@ -76,6 +79,10 @@ describe('API testing', () => {
           })
           loginToken = res.body.token
           expect(res.status).toBe(200)
+          expect(res.body.success).toBe(true)
+          expect(res.body.email).toBeDefined()
+          expect(res.body.firstName).toBeDefined()
+          expect(res.body.token).toBeDefined()
       });
 
       it('Should not login', async () => {
@@ -85,6 +92,8 @@ describe('API testing', () => {
             password: "Appu@123"
           })
           expect(res.status).toBe(400)
+          expect(res.body.success).toBe(false)
+          expect(res.body.email).not.toBeDefined()
       });
     });
 
@@ -95,6 +104,7 @@ describe('API testing', () => {
             email: "prateek.s.hiremath123@gmail.com"
           })
           .expect(200)
+        expect(res.body.success).toBe(true)
         resetToken = res.body.token
       });
 
@@ -104,6 +114,7 @@ describe('API testing', () => {
             email: "appu@gmail.com"
           })
           .expect(400)
+        expect(res.body.success).toBe(false)
       });
 
     });
@@ -115,6 +126,7 @@ describe('API testing', () => {
           .set('Authorization', `Bearer ${resetToken}`)
           .send({ password: "Hiremath@987" });
         expect(res.statusCode).toBe(200);
+        expect(res.body.success).toBe(true)
       });
 
       it('Should not reset the password', async () => {
@@ -123,23 +135,24 @@ describe('API testing', () => {
           .set('Authorization', `Bearer ${resetToken}`)
           .send({ password: "" });
         expect(res.statusCode).toBe(400);
+        expect(res.body.success).toBe(false)
       });
     });
 
     describe('Create Note', () => {
       it('Should create a new note', async () => {
-        console.log(loginToken)
         const res = await request(app)
           .post('/api/notes')
           .set('Authorization', `Bearer ${loginToken}`)
           .send({
             title: 'Test Note',
-            discription: 'This is a test note',
-            color: 'yellow',
+            description: 'This is a test note',
+            color: 'yellow'
           });
         expect(res.status).toBe(201);
         expect(res.body.success).toBe(true);
-        noteId = res.body._id;
+        expect(res.body.id).toBeDefined()
+        noteId = res.body.id;
       });
 
       it('Should not create note', async () => {
@@ -148,7 +161,7 @@ describe('API testing', () => {
           .set('Authorization', `Bearer ${loginToken}`)
           .send({
             title: '',
-            discription: 'jest',
+            description: 'jest',
             color: 'red',
           });
         expect(res.status).toBe(400);
@@ -206,7 +219,7 @@ describe('API testing', () => {
           .put(`/api/notes/${noteId}`)
           .send({
             title: 'To Do',
-            discription: 'Testing using jest',
+            description: 'Testing using jest',
             color: 'black'
           })
           .set('Authorization', `Bearer ${loginToken}`)
@@ -219,7 +232,7 @@ describe('API testing', () => {
           .put(`/api/notes/${noteId}0`)
           .send({
             title: 'To Do',
-            discription: 'Testing using jest',
+            description: 'Testing using jest',
             color: 'black'
           })
           .set('Authorization', `Bearer ${loginToken}`)
@@ -232,12 +245,24 @@ describe('API testing', () => {
           .put(`/api/notes/${noteId}`)
           .send({
             title: 'To Do',
-            discription: 'Testing using jest',
+            description: 'Testing using jest',
             color: 'black'
           })
           .set('Authorization', `Bearer ${loginToken}0`)
         expect(res.status).toBe(400);
         expect(res.body.success).toBe(false);
+      });
+
+      it('Should update an existing note', async () => {
+        const res = await request(app)
+          .put(`/api/notes/${noteId}`)
+          .send({
+            title: 'To Do Testing Verification',
+            color: 'black'
+          })
+          .set('Authorization', `Bearer ${loginToken}`)
+        expect(res.status).toBe(200);
+        expect(res.body.success).toBe(true);
       });
     })
 

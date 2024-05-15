@@ -24,12 +24,12 @@ export async function getAllNotesFromRedisClint(userId){
 export async function getNoteFromRedisClint(userId, noteId){
     const getAllNotes = await redisClint.lrange(`user:${userId}`,0,-1)
     const notesArray = Object.values(getAllNotes).map(JSON.parse);
-    return notesArray.filter((note) => {
+    return notesArray.find((note) => {
         return note._id===noteId
     })
 }
 
 export async function deleteNoteFromRedisClint(userId, noteId){
     const note = await getNoteFromRedisClint(userId, noteId)
-    await redisClint.lrem(`user:${userId}`, 0, JSON.stringify(note[0]))
+    await redisClint.lrem(`user:${userId}`, 0, JSON.stringify(note))
 }
