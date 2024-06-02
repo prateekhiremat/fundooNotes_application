@@ -38,6 +38,10 @@
               "description": "User created successfully",
               "content": {}
             },
+            "400": {
+              "description": "Bad Request",
+              "content": {}
+            },
             "500": {
               "description": "Internal server error",
               "content": {}
@@ -72,6 +76,10 @@
               "description": "email or password doesn't match",
               "content": {}
             },
+            "400": {
+              "description": "Bad Request",
+              "content": {}
+            },
             "500": {
               "description": "Internal server error",
               "content": {}
@@ -100,6 +108,10 @@
           "responses": {
             "200": {
               "description": "reset password link sent sucessfully",
+              "content": {}
+            },
+            "400": {
+              "description": "Bad Request",
               "content": {}
             },
             "500": {
@@ -132,6 +144,10 @@
               "description": "reset Password is sucessfully done",
               "content": {}
             },
+            "400": {
+              "description": "Bad Request",
+              "content": {}
+            },
             "500": {
               "description": "Internal server error",
               "content": {}
@@ -154,6 +170,10 @@
           "responses": {
             "200": {
               "description": "notes fetched successfully",
+              "content": {}
+            },
+            "400": {
+              "description": "Bad Request",
               "content": {}
             },
             "500": {
@@ -188,6 +208,10 @@
               "description": "note created succesfully",
               "content": {}
             },
+            "400": {
+              "description": "Bad Request",
+              "content": {}
+            },
             "500": {
               "description": "Internal server error",
               "content": {}
@@ -220,6 +244,10 @@
           "responses": {
             "200": {
               "description": "note fetched successfully",
+              "content": {}
+            },
+            "400": {
+              "description": "Bad Request",
               "content": {}
             },
             "500": {
@@ -264,6 +292,10 @@
               "description": "note updated succesfully",
               "content": {}
             },
+            "400": {
+              "description": "Bad Request",
+              "content": {}
+            },
             "500": {
               "description": "Internal server error",
               "content": {}
@@ -294,6 +326,10 @@
           "responses": {
             "202": {
               "description": "Note deleted succesfully",
+              "content": {}
+            },
+            "400": {
+              "description": "Bad Request",
               "content": {}
             },
             "500": {
@@ -329,6 +365,10 @@
               "description": "note archieved succesfully",
               "content": {}
             },
+            "400": {
+              "description": "Bad Request",
+              "content": {}
+            },
             "500": {
               "description": "Internal server error",
               "content": {}
@@ -360,6 +400,10 @@
           "responses": {
             "202": {
               "description": "note sent to trash succesfully",
+              "content": {}
+            },
+            "400": {
+              "description": "Bad Request",
               "content": {}
             },
             "500": {

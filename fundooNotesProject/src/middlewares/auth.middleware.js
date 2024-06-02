@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const secretKey = process.env.SECRET_KEY
-const secretKeyReset = process.env.SECRET_KEY_RESET
+const secretKey = process.env.SECRET_KEY;
+const secretKeyReset = process.env.SECRET_KEY_RESET;
 
 /**
  * Middleware to authenticate if user has a valid Authorization token
@@ -22,7 +22,7 @@ export const userAuth = async (req, res, next) => {
         code: HttpStatus.BAD_REQUEST,
         message: 'Please login'
       };
-    bearerToken = bearerToken.split(' ')[1]
+    bearerToken = bearerToken.split(' ')[1];
     const userPayload = jwt.verify(bearerToken, secretKey);
     req.body.createdBy = userPayload._id;
     next();

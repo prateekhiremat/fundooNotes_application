@@ -6,7 +6,7 @@ export const userRegister = async (req, res) => {
     await UserService.userRegister(req.body);
     res.status(HttpStatus.CREATED).json({
       success: true,
-      message: 'User created successfully',
+      message: 'User created successfully'
     });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
@@ -19,7 +19,7 @@ export const userRegister = async (req, res) => {
 export const userLogin = async (req, res) => {
   try {
     const data = await UserService.userLogin(req.body);
-    const{firstName, email} = data.user
+    const { firstName, email } = data.user;
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'User loggedIn successfully',
@@ -35,34 +35,33 @@ export const userLogin = async (req, res) => {
   }
 };
 
-export const forgetPassword = async(req, res) => {
-  try{
-    const data = await UserService.forgetPassword(req.body.email)
+export const forgetPassword = async (req, res) => {
+  try {
+    const data = await UserService.forgetPassword(req.body.email);
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Please reset your password through email',
       token: data
     });
-  }catch(error){
+  } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
       success: false,
       message: `${error}`
     });
   }
-}
+};
 
-export const resetPassword = async(req, res) => {
-  try{
-    const data = await UserService.resetPassword(req.userId, req.body.password)
-    const email = data
+export const resetPassword = async (req, res) => {
+  try {
+    await UserService.resetPassword(req.userId, req.body.password);
     res.status(HttpStatus.OK).json({
       success: true,
       message: 'Password reset successfull'
     });
-  }catch(error){
+  } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
       success: false,
       message: `${error}`
     });
   }
-}
+};

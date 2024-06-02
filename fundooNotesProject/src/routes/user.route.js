@@ -12,6 +12,11 @@ router.post('/login', validator.loginRegister, userController.userLogin);
 
 router.post('/forgotpassword', validator.email, userController.forgetPassword);
 
-router.post('/resetPassword', validator.password, userAuthForResetPassword, userController.resetPassword)
+router.post(
+  '/resetPassword',
+  validator.password,
+  userAuthForResetPassword,
+  userController.resetPassword
+);
 
 export default router;
