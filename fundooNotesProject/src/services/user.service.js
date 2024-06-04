@@ -13,7 +13,7 @@ export const userRegister = async (body) => {
       if (userObj !== null) {
         throw new Error('User Already Exist');
       }
-      await producerInit(req.body)
+      await producerInit(body)
       return bcrypt.hash(body.password, 10);
     })
     .then((hashedPassword) => {
